@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {useState} from 'react';
 import {
     Dimensions,
+    KeyboardAvoidingView,
     Modal,
     ScrollView,
     StyleSheet,
@@ -23,7 +24,7 @@ const ShowNotes = ({
 }) => {
     const [editTitle, setEditTitle] = useState(notes[index].title);
     const [editDec, setEditDec] = useState(notes[index].description);
-    
+
     const saveNotes = async (editTitle, editDec, index) => {
         let modifiedNote = notes;
         modifiedNote[index].title = editTitle;
@@ -35,57 +36,63 @@ const ShowNotes = ({
     };
     return (
         <Modal animationType="slide" transparent={true} visible={noteShow}>
-            <TouchableOpacity
-                onPress={() => {
-                    setEditNotes(!editNotes);
-                    setNoteShow(!noteShow);
-                }}
-                activeOpacity={0.8}
-                style={styles.CrossButton}>
-                <Text style={styles.CrossButtonText}>X</Text>
-            </TouchableOpacity>
+            <KeyboardAvoidingView style={{flex: 1}}>
+                <TouchableOpacity
+                    onPress={() => {
+                        setEditNotes(!editNotes);
+                        setNoteShow(!noteShow);
+                    }}
+                    activeOpacity={0.8}
+                    style={styles.CrossButton}>
+                    <Text style={styles.CrossButtonText}>X</Text>
+                </TouchableOpacity>
 
-            <View style={styles.MainContainer}>
-                <ScrollView contentContainerStyle={styles.Container}>
-                    <View style={styles.TitleContainer}>
+                <View style={styles.MainContainer}>
+                    <ScrollView contentContainerStyle={styles.Container}>
+                        <View style={styles.TitleContainer}>
+                            {editNotes ? (
+                                <TextInput
+                                    placeholder="Enter Your Title"
+                                    multiline
+                                    style={styles.TitleContainerEdit}
+                                    value={editTitle}
+                                    onChangeText={text => setEditTitle(text)}
+                                />
+                            ) : (
+                                <Text style={styles.TitleText}>
+                                    {editTitle}
+                                </Text>
+                            )}
+                        </View>
+                        <View style={styles.NotesContainer}>
+                            {editNotes ? (
+                                <TextInput
+                                    placeholder="Enter Your Notes"
+                                    multiline
+                                    style={styles.NotesContainerEdit}
+                                    value={editDec}
+                                    onChangeText={text => setEditDec(text)}
+                                />
+                            ) : (
+                                <Text style={styles.NotesText}>{editDec}</Text>
+                            )}
+                        </View>
                         {editNotes ? (
-                            <TextInput
-                                placeholder="Enter Your Title"
-                                multiline
-                                style={styles.TitleContainerEdit}
-                                value={editTitle}
-                                onChangeText={text => setEditTitle(text)}
-                            />
-                        ) : (
-                            <Text style={styles.TitleText}>{editTitle}</Text>
-                        )}
-                    </View>
-                    <View style={styles.NotesContainer}>
-                        {editNotes ? (
-                            <TextInput
-                                placeholder="Enter Your Notes"
-                                multiline
-                                style={styles.NotesContainerEdit}
-                                value={editDec}
-                                onChangeText={text => setEditDec(text)}
-                            />
-                        ) : (
-                            <Text style={styles.NotesText}>{editDec}</Text>
-                        )}
-                    </View>
-                    {editNotes ? (
-                        <TouchableOpacity
-                            onPress={() => {
-                                setEditNotes(!editNotes);
-                                setNoteShow(!noteShow);
-                                saveNotes(editTitle, editDec, index);
-                            }}
-                            style={styles.SaveButton}>
-                            <Text style={styles.SaveButtonText}>Update</Text>
-                        </TouchableOpacity>
-                    ) : null}
-                </ScrollView>
-            </View>
+                            <TouchableOpacity
+                                onPress={() => {
+                                    setEditNotes(!editNotes);
+                                    setNoteShow(!noteShow);
+                                    saveNotes(editTitle, editDec, index);
+                                }}
+                                style={styles.SaveButton}>
+                                <Text style={styles.SaveButtonText}>
+                                    Update
+                                </Text>
+                            </TouchableOpacity>
+                        ) : null}
+                    </ScrollView>
+                </View>
+            </KeyboardAvoidingView>
         </Modal>
     );
 };

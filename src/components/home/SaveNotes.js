@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {useState} from 'react';
 import {
     Dimensions,
+    KeyboardAvoidingView,
     Modal,
     ScrollView,
     StyleSheet,
@@ -53,43 +54,45 @@ const SaveNotes = ({notes, setNotes, show, setShow, setFilterNotes}) => {
 
     return (
         <Modal animationType="slide" transparent={true} visible={show}>
-            <TouchableOpacity
-                onPress={() => setShow(!show)}
-                activeOpacity={0.8}
-                style={styles.CrossButton}>
-                <Text style={styles.CrossButtonText}>X</Text>
-            </TouchableOpacity>
+            <KeyboardAvoidingView style={{flex:1}}>
+                <TouchableOpacity
+                    onPress={() => setShow(!show)}
+                    activeOpacity={0.8}
+                    style={styles.CrossButton}>
+                    <Text style={styles.CrossButtonText}>X</Text>
+                </TouchableOpacity>
 
-            <View style={styles.MainContainer}>
-                <ScrollView contentContainerStyle={styles.Container}>
-                    <TextInput
-                        placeholder="Enter Your Title"
-                        placeholderTextColor={'gray'}
-                        multiline
-                        style={styles.TitleContainer}
-                        value={title}
-                        onChangeText={text => setTitle(text)}
-                    />
-                    <TextInput
-                        placeholder="Enter Your Notes"
-                        placeholderTextColor={'gray'}
-                        multiline
-                        style={styles.NotesContainer}
-                        value={dec}
-                        onChangeText={text => setDec(text)}
-                    />
-                    <TouchableOpacity
-                        onPress={() => {
-                            setShow(!show);
-                            saveNotes(title, dec);
-                            setTitle(null);
-                            setDec(null);
-                        }}
-                        style={styles.SaveButton}>
-                        <Text style={styles.SaveButtonText}>Save</Text>
-                    </TouchableOpacity>
-                </ScrollView>
-            </View>
+                <View style={styles.MainContainer}>
+                    <ScrollView contentContainerStyle={styles.Container}>
+                        <TextInput
+                            placeholder="Enter Your Title"
+                            placeholderTextColor={'gray'}
+                            multiline
+                            style={styles.TitleContainer}
+                            value={title}
+                            onChangeText={text => setTitle(text)}
+                        />
+                        <TextInput
+                            placeholder="Enter Your Notes"
+                            placeholderTextColor={'gray'}
+                            multiline
+                            style={styles.NotesContainer}
+                            value={dec}
+                            onChangeText={text => setDec(text)}
+                        />
+                        <TouchableOpacity
+                            onPress={() => {
+                                setShow(!show);
+                                saveNotes(title, dec);
+                                setTitle(null);
+                                setDec(null);
+                            }}
+                            style={styles.SaveButton}>
+                            <Text style={styles.SaveButtonText}>Save</Text>
+                        </TouchableOpacity>
+                    </ScrollView>
+                </View>
+            </KeyboardAvoidingView>
         </Modal>
     );
 };
@@ -136,7 +139,7 @@ const styles = StyleSheet.create({
         fontSize: height * 0.02,
         paddingHorizontal: 20,
         backgroundColor: '#fff44f',
-        color:'#000',
+        color: '#000',
         elevation: 10,
     },
     NotesContainer: {
@@ -146,7 +149,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff44f',
         elevation: 4,
         textAlignVertical: 'top',
-        color:'#000'
+        color: '#000',
     },
     SaveButton: {
         width: 200,

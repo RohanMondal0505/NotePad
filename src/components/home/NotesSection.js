@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {useState} from 'react';
 import {
     Alert,
@@ -20,10 +21,9 @@ const NotesSection = ({filterNotes, setFilterNotes, notes, setNotes}) => {
     const deleteNotes = async index => {
         const tempNotes = notes;
         tempNotes.splice(index, 1);
-        // console.log("TempNotes  => ",tempNotes);
-        setFilterNotes(tempNotes);
-        setNotes(tempNotes);
-        // await AsyncStorage.setItem('notes',JSON.stringify(tempNote))
+        setFilterNotes([...tempNotes]);
+        setNotes([...tempNotes]);
+        await AsyncStorage.setItem('notes', JSON.stringify(tempNotes));
     };
     const alertSection = index => {
         Alert.alert('Are you sure ?', '', [
